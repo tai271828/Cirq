@@ -180,11 +180,66 @@ def test_single_qubit_matrix_to_gates_tolerance_half_turn_phasing():
 def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
     u, t, g = cirq.single_qubit_op_to_framed_phase_form(
         cirq.unitary(cirq.Y**0.25))
+    vals, vecs = np.linalg.eig(cirq.unitary(cirq.Y**0.25))
+    #actual, desired = cirq.linalg.match_global_phase(u, cirq.unitary(cirq.X**0.5))
+    a = u
+    b = cirq.unitary(cirq.X**0.5)
+    k = max(np.ndindex(*a.shape), key=lambda t: abs(b[t]))
+    def dephase(v):
+        r = np.real(v)
+        i = np.imag(v)
+
+        # Avoid introducing floating point error when axis-aligned.
+        if i == 0:
+            print("i==0")
+            return -1 if r < 0 else 1
+        if r == 0:
+            print("r==0")
+            return 1j if i < 0 else -1j
+
+        print(f"np.arctan2: {np.arctan2(i, r)}")
+        print(f"np.exp(-1j * np.arctan2(i, r)): {np.exp(-1j * np.arctan2(i, r))}")
+        return np.exp(-1j * np.arctan2(i, r))
+    actual = a * dephase(a[k])
+    desired = b * dephase(b[k])
+    print(f"cirq.uY: {cirq.unitary(cirq.Y**0.25)}")
+    print(f"cirq.uX: {cirq.unitary(cirq.X**0.5)}")
+    print(f"e-values: {vals}")
+    print(f"e-vector: {vecs}")
+    print(f"u: {u}")
+    print(f"a: {a}")
+    print(f"b: {b}")
+    print(f"k: {k}")
+    print(f"actual: {actual}")
+    print(f"desired: {desired}")
     cirq.testing.assert_allclose_up_to_global_phase(u,
                                                     cirq.unitary(cirq.X**0.5),
                                                     atol=1e-7)
     assert abs(t - (1 + 1j) * math.sqrt(0.5)) < 0.00001
     assert abs(g - 1) < 0.00001
+
+
+def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
+    unitary = np.array(
+        [
+            [0.85355339 + 0.35355339j, -0.35355339 - 0.14644661j],
+            [0.35355339 + 0.14644661j, 0.85355339 + 0.35355339j]
+        ]
+    )
+    desired = np.array(
+        [
+            [7.07106781e-01+0.j, 3.33066907e-16+0.70710678j],
+            [2.77555756e-16+0.70710678j, 7.07106781e-01+0.j],
+        ]
+    )
+    vals_yu, vecs_yu = np.linalg.eig(cirq.unitary(cirq.Y**0.25))
+    vals, vecs = np.linalg.eig(unitary)
+    print(f"e-values: {vals} {vals_yu}")
+    print(f"e-vector: {vecs} {vecs_yu}")
+
+    np.testing.assert_allclose(unitary, cirq.unitary(cirq.Y**0.25), rtol=1e-7, atol=1e-7)
+    np.testing.assert_allclose(vecs, vecs_yu, rtol=1e-7, atol=1e-7)
+    np.testing.assert_allclose(vecs, desired, rtol=1e-7, atol=1e-7)
 
 
 @pytest.mark.parametrize('mat', [
