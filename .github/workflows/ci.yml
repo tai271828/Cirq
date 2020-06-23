@@ -1,6 +1,6 @@
 name: Continuous Integration
 
-on: [pull_request]
+on: [pull_request, push]
 
 jobs:
   quick_test:
@@ -93,8 +93,21 @@ jobs:
           architecture: 'x64'
       - name: Install requirements
         run: |
+          sudo apt-get install pastebinit -y -q=2
           pip install -r requirements.txt
           pip install -r dev_tools/conf/pip-list-dev-tools.txt
+
+          echo
+          echo "show pip list on pastebin"
+          pip list > /tmp/pip-list.txt
+          pastebinit /tmp/pip-list.txt
+          echo
+
+          echo
+          echo "show qiskit code on pastebin"
+          qiskit_path=$(python -c "import qiskit; print(qiskit.__path__[0])")
+          pastebinit $qiskit_path/__init__.py
+          echo
       - name: Pytest check
         run: check/pytest --ignore=cirq/contrib --benchmark-skip --actually-quiet
   build_docs:
