@@ -111,6 +111,37 @@ jobs:
           echo
       - name: Pytest check
         run: check/pytest --ignore=cirq/contrib --benchmark-skip --actually-quiet
+  my_pytest:
+    name: My Pytest on Ubuntu
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.6'
+          architecture: 'x64'
+      - name: Install requirements
+        run: |
+          sudo apt-get install pastebinit -y -q=2
+          pip install -r requirements.txt
+          pip install -r dev_tools/conf/pip-list-dev-tools.txt
+
+          echo
+          echo "show pip list on pastebin"
+          pip list | grep numpy
+          pip list > /tmp/pip-list.txt
+          pastebinit /tmp/pip-list.txt
+          echo
+
+          echo
+          echo "show qiskit code on pastebin"
+          qiskit_path=$(python -c "import qiskit; print(qiskit.__path__[0])")
+          pastebinit $qiskit_path/__init__.py
+          echo
+      - name: Pytest check
+        run: |
+          pytest ${GITHUB_WORKSPACE}/cirq/ion/convert_to_ion_gates_test.py::test_convert_to_ion_gates \
+                 ${GITHUB_WORKSPACE}/cirq/optimizers/decompositions_test.py::test_single_qubit_op_to_framed_phase_form_output_on_example_case
   build_docs:
     name: Build docs
     runs-on: ubuntu-16.04
