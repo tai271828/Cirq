@@ -141,7 +141,8 @@ jobs:
       - name: Pytest check
         run: |
           pytest ${GITHUB_WORKSPACE}/cirq/ion/convert_to_ion_gates_test.py::test_convert_to_ion_gates \
-                 ${GITHUB_WORKSPACE}/cirq/optimizers/decompositions_test.py::test_single_qubit_op_to_framed_phase_form_output_on_example_case
+                 ${GITHUB_WORKSPACE}/cirq/optimizers/decompositions_test.py::test_single_qubit_op_to_framed_phase_form_output_on_example_case \
+                 ${GITHUB_WORKSPACE}/cirq/optimizers/decompositions_test.py::test_single_qubit_op_to_framed_phase_form_output_on_example_case_2
   build_docs:
     name: Build docs
     runs-on: ubuntu-16.04
