@@ -191,18 +191,25 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
 
         # Avoid introducing floating point error when axis-aligned.
         if i == 0:
+            print("i==0")
             return -1 if r < 0 else 1
         if r == 0:
+            print("r==0")
             return 1j if i < 0 else -1j
 
+        print(f"np.arctan2: {np.arctan2(i, r)}")
+        print(f"np.exp(-1j * np.arctan2(i, r)): {np.exp(-1j * np.arctan2(i, r))}")
         return np.exp(-1j * np.arctan2(i, r))
     actual = a * dephase(a[k])
     desired = b * dephase(b[k])
-    print(f"cirq.uY: {cirq.unitary(cirq.Y**0.25)}")
-    print(f"cirq.uX: {cirq.unitary(cirq.X**0.5)}")
-    print(f"e-values: {vals}")
-    print(f"e-vector: {vecs}")
-    print(f"u: {u}")
+    #print(f"cirq.uY: {cirq.unitary(cirq.Y**0.25)}")
+    #print(f"cirq.uX: {cirq.unitary(cirq.X**0.5)}")
+    #print(f"e-values: {vals}")
+    #print(f"e-vector: {vecs}")
+    #print(f"u: {u}")
+    print(f"a: {a}")
+    print(f"b: {b}")
+    print(f"k: {k}")
     print(f"actual: {actual}")
     print(f"desired: {desired}")
     cirq.testing.assert_allclose_up_to_global_phase(u,
