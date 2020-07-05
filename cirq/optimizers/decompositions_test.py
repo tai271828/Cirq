@@ -181,11 +181,14 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
     u, t, g = cirq.single_qubit_op_to_framed_phase_form(
         cirq.unitary(cirq.Y**0.25))
     vals, vecs = np.linalg.eig(cirq.unitary(cirq.Y**0.25))
+    actual, desired = linalg.match_global_phase(u, cirq.unitary(cirq.X**0.5))
     print(f"cirq.uY: {cirq.unitary(cirq.Y**0.25)}")
     print(f"cirq.uX: {cirq.unitary(cirq.X**0.5)}")
     print(f"e-values: {vals}")
     print(f"e-vector: {vecs}")
     print(f"u: {u}")
+    print(f"actual: {actual}")
+    print(f"desired: {desired}")
     cirq.testing.assert_allclose_up_to_global_phase(u,
                                                     cirq.unitary(cirq.X**0.5),
                                                     atol=1e-7)
