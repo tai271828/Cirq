@@ -180,6 +180,7 @@ def test_single_qubit_matrix_to_gates_tolerance_half_turn_phasing():
 def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
     u, t, g = cirq.single_qubit_op_to_framed_phase_form(
         cirq.unitary(cirq.Y**0.25))
+    print(cirq.unitary(cirq.Y**0.25))
     print(u)
     cirq.testing.assert_allclose_up_to_global_phase(u,
                                                     cirq.unitary(cirq.X**0.5),
@@ -191,6 +192,7 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
 def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
     u, t, g = cirq.single_qubit_op_to_framed_phase_form(
         cirq.unitary(cirq.Y**0.25))
+    print(cirq.unitary(cirq.Y**0.25))
     print(u)
     cirq.testing.assert_allclose_up_to_global_phase(u,
                                                     cirq.unitary(cirq.X**0.5),
