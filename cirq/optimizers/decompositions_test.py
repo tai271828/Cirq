@@ -181,7 +181,23 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
     u, t, g = cirq.single_qubit_op_to_framed_phase_form(
         cirq.unitary(cirq.Y**0.25))
     vals, vecs = np.linalg.eig(cirq.unitary(cirq.Y**0.25))
-    actual, desired = cirq.linalg.match_global_phase(u, cirq.unitary(cirq.X**0.5))
+    #actual, desired = cirq.linalg.match_global_phase(u, cirq.unitary(cirq.X**0.5))
+    a = u
+    b = cirq.unitary(cirq.X**0.5)
+    k = max(np.ndindex(*a.shape), key=lambda t: abs(b[t]))
+    def dephase(v):
+        r = np.real(v)
+        i = np.imag(v)
+
+        # Avoid introducing floating point error when axis-aligned.
+        if i == 0:
+            return -1 if r < 0 else 1
+        if r == 0:
+            return 1j if i < 0 else -1j
+
+        return np.exp(-1j * np.arctan2(i, r))
+    actual = a * dephase(a[k])
+    desired = b * dephase(b[k])
     print(f"cirq.uY: {cirq.unitary(cirq.Y**0.25)}")
     print(f"cirq.uX: {cirq.unitary(cirq.X**0.5)}")
     print(f"e-values: {vals}")
