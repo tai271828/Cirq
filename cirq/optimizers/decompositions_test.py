@@ -211,6 +211,19 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case_3():
     np.testing.assert_allclose(x, y, rtol=1e-5, atol=0)
 
 
+def test_single_qubit_op_to_framed_phase_form_output_on_example_case_4():
+    u, t, g = cirq.single_qubit_op_to_framed_phase_form(
+        cirq.unitary(cirq.X))
+    print(cirq.unitary(cirq.X))
+    vals, vecs = np.linalg.eig(cirq.unitary(cirq.X))
+    print(vals)
+    print(vecs)
+    print(u)
+    cirq.testing.assert_allclose_up_to_global_phase(u,
+                                                    cirq.unitary(cirq.X),
+                                                    atol=1e-7)
+
+
 @pytest.mark.parametrize('mat', [
     np.eye(2),
     cirq.unitary(cirq.H),
