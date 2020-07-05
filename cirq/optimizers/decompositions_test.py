@@ -226,7 +226,7 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
             [0.35355339 + 0.14644661j, 0.85355339 + 0.35355339j]
         ]
     )
-    actual = np.array(
+    desired = np.array(
         [
             [7.07106781e-01+0.j, 3.33066907e-16+0.70710678j],
             [2.77555756e-16+0.70710678j, 7.07106781e-01+0.j],
@@ -235,7 +235,9 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
     vals, vecs = np.linalg.eig(unitary)
     print(f"e-values: {vals}")
     print(f"e-vector: {vecs}")
-    np.testing.assert_allclose(vecs, actual, rtol=1e-5, atol=0)
+
+    np.testing.assert_allclose(unitary, cirq.unitary(cirq.Y**0.25), rtol=1e-7, atol=0)
+    np.testing.assert_allclose(vecs, desired, rtol=1e-7, atol=0)
 
 
 @pytest.mark.parametrize('mat', [
