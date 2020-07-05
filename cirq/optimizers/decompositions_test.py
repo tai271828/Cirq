@@ -193,8 +193,12 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
     cirq.testing.assert_allclose_up_to_global_phase(u,
                                                     cirq.unitary(cirq.X**0.5),
                                                     atol=1e-7)
-    assert abs(t - (1 + 1j) * math.sqrt(0.5)) < 0.00001
-    assert abs(g - 1) < 0.00001
+
+
+def test_single_qubit_op_to_framed_phase_form_output_on_example_case_3():
+    x = [1e-5, 1e-3, 1e-1]
+    y = np.arccos(np.cos(x))
+    np.testing.assert_allclose(x, y, rtol=1e-5, atol=0)
 
 
 @pytest.mark.parametrize('mat', [
