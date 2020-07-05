@@ -220,36 +220,22 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
 
 
 def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
-    u, t, g = cirq.single_qubit_op_to_framed_phase_form(
-        cirq.unitary(cirq.Y**0.25))
-    vals, vecs = np.linalg.eig(cirq.unitary(cirq.Y**0.25))
-    print(f"cirq.u: {cirq.unitary(cirq.Y**0.25)}")
-    print(f"cirq.u: {cirq.unitary(cirq.X**0.5)}")
+    unitary = np.array(
+        [
+            [0.85355339 + 0.35355339j, -0.35355339 - 0.14644661j],
+            [0.35355339 + 0.14644661j, 0.85355339 + 0.35355339j]
+        ]
+    )
+    actual = np.array(
+        [
+            [7.07106781e-01+0.j, 3.33066907e-16+0.70710678j],
+            [2.77555756e-16+0.70710678j, 7.07106781e-01+0.j],
+        ]
+    )
+    vals, vecs = np.linalg.eig(unitary)
     print(f"e-values: {vals}")
     print(f"e-vector: {vecs}")
-    print(f"u: {u}")
-    cirq.testing.assert_allclose_up_to_global_phase(u,
-                                                    cirq.unitary(cirq.X**0.5),
-                                                    atol=1e-7)
-
-
-def test_single_qubit_op_to_framed_phase_form_output_on_example_case_3():
-    x = [1e-5, 1e-3, 1e-1]
-    y = np.arccos(np.cos(x))
-    np.testing.assert_allclose(x, y, rtol=1e-5, atol=0)
-
-
-def test_single_qubit_op_to_framed_phase_form_output_on_example_case_4():
-    u, t, g = cirq.single_qubit_op_to_framed_phase_form(
-        cirq.unitary(cirq.X))
-    vals, vecs = np.linalg.eig(cirq.unitary(cirq.X))
-    print(f"cirq.u: {cirq.unitary(cirq.X)}")
-    print(f"e-values: {vals}")
-    print(f"e-vector: {vecs}")
-    print(f"u: {u}")
-    cirq.testing.assert_allclose_up_to_global_phase(u,
-                                                    cirq.unitary(cirq.X),
-                                                    atol=1e-7)
+    np.testing.assert_allclose(vecs, actual, rtol=1e-5, atol=0)
 
 
 @pytest.mark.parametrize('mat', [
