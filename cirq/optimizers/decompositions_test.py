@@ -219,29 +219,6 @@ def test_single_qubit_op_to_framed_phase_form_output_on_example_case():
     assert abs(g - 1) < 0.00001
 
 
-def test_single_qubit_op_to_framed_phase_form_output_on_example_case_2():
-    unitary = np.array(
-        [
-            [0.85355339 + 0.35355339j, -0.35355339 - 0.14644661j],
-            [0.35355339 + 0.14644661j, 0.85355339 + 0.35355339j]
-        ]
-    )
-    desired = np.array(
-        [
-            [7.07106781e-01+0.j, 3.33066907e-16+0.70710678j],
-            [2.77555756e-16+0.70710678j, 7.07106781e-01+0.j],
-        ]
-    )
-    vals_yu, vecs_yu = np.linalg.eig(cirq.unitary(cirq.Y**0.25))
-    vals, vecs = np.linalg.eig(unitary)
-    print(f"e-values: {vals} {vals_yu}")
-    print(f"e-vector: {vecs} {vecs_yu}")
-
-    np.testing.assert_allclose(unitary, cirq.unitary(cirq.Y**0.25), rtol=1e-7, atol=1e-7)
-    np.testing.assert_allclose(vecs, vecs_yu, rtol=1e-7, atol=1e-7)
-    np.testing.assert_allclose(vecs, desired, rtol=1e-7, atol=1e-7)
-
-
 @pytest.mark.parametrize('mat', [
     np.eye(2),
     cirq.unitary(cirq.H),
