@@ -102,3 +102,5 @@ To be informed of deprecations and breaking changes, subscribe to the
 
 
 Cirq is not an official Google product. Copyright 2019 The Cirq Developers
+
+COSCUP demo
