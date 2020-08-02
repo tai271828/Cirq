@@ -65,3 +65,5 @@ operation can return something useful instead of `None`.
 8. Consider adding interop methods like `_qasm_`.
 These methods will fallback to using things like `_decompose_`, but the output
 is usually much better when specialized.
+
+demo in COSCUP
